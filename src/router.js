@@ -17,17 +17,41 @@ export default new Router({
     {
       path: '/profil',
       name: 'profil',
-      component: Profil
+      component: Profil,
+      beforeEnter (to, from, next) {
+        let status = localStorage.getItem('status')
+        if (status === 'connected') {
+          next()
+        } else {
+          next('/')
+        }
+      }
     },
     {
       path: '/login',
       name: 'login',
-      component: Login
+      component: Login,
+      beforeEnter (to, from, next) {
+        let status = localStorage.getItem('status')
+        if (status === 'connected') {
+          next('/')
+        } else {
+          next()
+        }
+      }
     },
     {
       path: '/signup',
       name: 'signup',
-      component: SignUp
+      component: SignUp,
+      beforeEnter (to, from, next) {
+        let status = localStorage.getItem('status')
+        if (status === 'connected') {
+          next('/')
+        } else {
+          next()
+        }
+      }
     }
   ]
 })

@@ -18,11 +18,8 @@
         <span v-if="confirmPassword.length > 0">{{ confirmpasswordmsg }}</span>
       </div>
       <div class="form-group">
-        <input type="password" class="form-control" v-model="biography" placeholder="biography">
+        <textarea type="text" class="form-control" v-model="biography" placeholder="biography"></textarea>
         <span v-if="biography.length > 0">{{ biographymsg }}</span>
-      </div>
-      <div class="form-group">
-        <input type="file" class="form-control" @change="getPhoto">
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-info" @click="signup" :disabled="allOk">Register</button>
@@ -44,7 +41,6 @@ export default {
       password: '',
       confirmPassword: '',
       biography: '',
-      photo: null,
       usernamemsg: '',
       emailmsg: '',
       passwordmsg: '',
@@ -54,8 +50,7 @@ export default {
       emailStatus: false,
       passwordStatus: false,
       confirmPasswordStatus: false,
-      biographyStatus: false,
-      photoStatus: false
+      biographyStatus: false
     }
   },
   watch: {
@@ -86,7 +81,7 @@ export default {
   },
   computed: {
     allOk: function () {
-      if (this.usernameStatus === true && this.emailStatus === true && this.passwordStatus === true && this.confirmPasswordStatus === true && this.biographyStatus === true && this.photoStatus === true) {
+      if (this.usernameStatus === true && this.emailStatus === true && this.passwordStatus === true && this.confirmPasswordStatus === true && this.biographyStatus === true) {
         return false
       } else {
         return true
@@ -182,21 +177,18 @@ export default {
       },
       500
     ),
-    getPhoto (event) {
-      this.photo = event.target.files[0]
-    },
     signup () {
-      let formData = new FormData()
-      formData.append('username', this.username)
-      formData.append('email', this.email)
-      formData.append('password', this.password)
-      formData.append('biography', this.biography)
-      formData.append('image', this.photo)
-      axios.post('http://localhost:3000/users/signup', formData)
+      let obj = {
+        username: this.username,
+        email: this.email,
+        password: this.password,
+        biography: this.biography
+      }
+      axios.post('http://localhost:3000/users/signup', obj, {})
         .then(response => {
           localStorage.setItem('token', response.data.token)
           localStorage.setItem('status', 'connected')
-          this.$router.push('home')
+          this.$router.push('/')
         })
         .catch(err => {
           console.log(err)
